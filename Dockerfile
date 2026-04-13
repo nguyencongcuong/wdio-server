@@ -1,5 +1,8 @@
-# Chromium + Bun: use official Bun image (avoids bun.sh / GitHub install during build).
+# Chromium + Bun: official Bun image. Node is copied in for @wdio/cli (bunx breaks WDIO).
+FROM node:20-bookworm-slim AS node
 FROM oven/bun:1.3.12-debian
+
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     chromium \
