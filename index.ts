@@ -3,11 +3,29 @@ const server = Bun.serve({
   routes: {
     "/": () => new Response("Welcome to the WebDriverIO server!"),
     "/wdio": async () => {
-      const process = Bun.spawn(["bun", "wdio"])
+      const proc = Bun.spawn(["bun", "run", "wdio"], {
+        cwd: import.meta.dir,
+        env: process.env,
+        stdout: "pipe",
+        stderr: "pipe",
+      });
 
-      return new Response(process.stdout, {status: 200});
-    }
-  }
+      const [exitCode, stdout, stderr] = await Promise.all([
+        proc.exited,
+        new Response(proc.stdout).text(),
+        new Response(proc.stderr).text(),
+      ]);
+
+      const body =
+        stdout +
+        (stderr.trim().length > 0 ? `\n--- stderr ---\n${stderr}` : "");
+
+      return new Response(body, {
+        status: exitCode === 0 ? 200 : 500,
+        headers: { "Content-Type": "text/plain; charset=utf-8" },
+      });
+    },
+  },
 });
 
 console.log(`Server running at http://localhost:${server.port}`);

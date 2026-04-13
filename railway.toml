@@ -1,0 +1,7 @@
+[deploy]
+startCommand = "bun run index.ts"
+healthcheckPath = "/"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+overlapSeconds = 60
+drainingSeconds = 10

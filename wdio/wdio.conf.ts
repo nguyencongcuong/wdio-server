@@ -1,3 +1,5 @@
+const chromeBin = process.env.CHROME_BIN;
+
 export const config: WebdriverIO.Config = {
     //
     // ====================
@@ -45,7 +47,7 @@ export const config: WebdriverIO.Config = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     //
-    maxInstances: 10,
+    maxInstances: process.env.RAILWAY_ENVIRONMENT ? 1 : 10,
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -53,9 +55,17 @@ export const config: WebdriverIO.Config = {
     //
     capabilities: [{
         browserName: 'chrome',
-            'goog:chromeOptions': {
-             args: ['--headless']
-            }
+        'goog:chromeOptions': {
+            ...(chromeBin ? { binary: chromeBin } : {}),
+            args: [
+                '--headless=new',
+                '--no-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--disable-setuid-sandbox',
+                '--window-size=1920,1080',
+            ],
+        },
     }],
 
     //

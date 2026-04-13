@@ -6,7 +6,7 @@
   "scripts": {
     "install:wdio": "cd wdio && bun install",
     "start": "bun run index.ts",
-    "wdio": "cd ./wdio && npx wdio run ./wdio.conf.ts"
+    "wdio": "cd ./wdio && bunx wdio run ./wdio.conf.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
