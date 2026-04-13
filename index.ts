@@ -1,5 +1,7 @@
 const server = Bun.serve({
   port: process.env.PORT ?? 3000,
+  // Default is 10s; /wdio waits for the full test run (often minutes). 0 disables idle timeout.
+  idleTimeout: Number(process.env.BUN_IDLE_TIMEOUT ?? 0),
   routes: {
     "/": () => new Response("Welcome to the WebDriverIO server!"),
     "/wdio": async () => {
